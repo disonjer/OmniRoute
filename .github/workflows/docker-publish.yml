@@ -122,6 +122,7 @@ jobs:
     name: Build Docker (${{ matrix.platform }})
     needs: prepare
     if: needs.prepare.outputs.skip != 'true'
+    environment: Docker
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -199,6 +200,7 @@ jobs:
       - prepare
       - build
     if: needs.prepare.outputs.skip != 'true'
+    environment: Docker
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: disonjer/omniroute

@@ -32,9 +32,10 @@ const ROOT = join(__dirname, "..");
 // Redirect console.log/warn to stderr early (before loadEnvFile and DB init)
 // so no startup output corrupts the protocol.
 if (process.argv.includes("--mcp")) {
-  const _stderrWrite = (msg) => process.stderr.write(msg + "\n");
-  console.log = (...a) => _stderrWrite(a.join(" "));
-  console.warn = (...a) => _stderrWrite(a.join(" "));
+  const { Console } = await import("node:console");
+  const stderrConsole = new Console({ stdout: process.stderr, stderr: process.stderr });
+  console.log = stderrConsole.log.bind(stderrConsole);
+  console.warn = stderrConsole.warn.bind(stderrConsole);
 }
 
 function loadEnvFile() {
